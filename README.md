@@ -14,25 +14,32 @@ Kept deliberately separate from the professional site (johnsolk.github.io).
 - `assets/fiddle_heart.png` — the logo (fiddlehead fern / cello scroll /
   heart mark, based on Lisa's own reference drawing)
 
-This is a plain static HTML site — no build step, no framework. Every page
-is a normal file you can open and edit directly.
+The HTML/CSS/assets are still plain and hand-edited — no framework. Vite is
+used only as a build/dev tool: `npm run dev` serves the pages with live
+reload, `npm run build` bundles everything into `dist/` with asset hashing
+and rewrites paths for the `/fiddle/` subpath.
 
 ## Deploying to GitHub Pages
 
-1. Create a new empty repo on GitHub (suggested name: `fiddle`).
-2. Add these files to the repo — either drag-and-drop upload on github.com,
-   or clone the repo locally, copy these files in, then:
-   ```
-   git add .
-   git commit -m "initial site"
-   git push
-   ```
-3. In the repo, go to **Settings → Pages**, and set the source to the
-   branch you pushed to (usually `main`), root folder.
+Deployment is automated via GitHub Actions (`.github/workflows/deploy.yml`):
+on every push to `main`, it runs `npm run build` and publishes the `dist/`
+output to the `gh-pages` branch (using `peaceiris/actions-gh-pages`).
+
+One-time setup after the first push:
+
+1. Push this repo to GitHub (suggested name: `fiddle`).
+2. Wait for the "Deploy to gh-pages" Action to finish — it creates the
+   `gh-pages` branch.
+3. In the repo, go to **Settings → Pages**, and set the source branch to
+   `gh-pages`, root folder.
 4. The site will be live in a minute or two at:
    `https://johnsolk.github.io/fiddle/`
    (a project page, since only one repo per account — the existing
-   `johnsolk.github.io` — can be the root site).
+   `johnsolk.github.io` — can be the root site). `vite.config.js` sets
+   `base: '/fiddle/'` so built asset URLs resolve correctly under that path.
+
+To build/preview locally: `npm install`, then `npm run dev` (or
+`npm run build && npm run preview`).
 
 ## Still open / decisions made so far
 
